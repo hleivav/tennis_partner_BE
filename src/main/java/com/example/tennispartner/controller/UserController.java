@@ -45,7 +45,7 @@ public class UserController {
                 ));
             }).orElseGet(() -> ResponseEntity.notFound().build());
     }
-
+//om jag gör en kommentar
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User update) {
         return userService.findById(id).map(user -> {
@@ -75,7 +75,7 @@ public class UserController {
                 ));
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
-//Trigger deploy: koppling till Railway Postgres
+//Trigger deploy: koppling till Railway Postgres 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
     User saved = userService.register(user);
