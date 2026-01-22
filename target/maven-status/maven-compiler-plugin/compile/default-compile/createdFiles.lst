@@ -3,6 +3,7 @@ com\example\tennispartner\controller\AuthController.class
 com\example\tennispartner\controller\UserController.class
 com\example\tennispartner\dto\AuthResponse.class
 com\example\tennispartner\TennisPartnerApplication.class
+com\example\tennispartner\controller\AdminConfigController.class
 com\example\tennispartner\dto\PasswordResetConfirmRequest.class
 com\example\tennispartner\repository\MatchRepository.class
 com\example\tennispartner\repository\PasswordResetTokenRepository.class

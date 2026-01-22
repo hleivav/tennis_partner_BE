@@ -2,6 +2,7 @@ C:\NoOneDrive\Projekt\tennis_partner\tennis_partner_BE\src\main\java\com\example
 C:\NoOneDrive\Projekt\tennis_partner\tennis_partner_BE\src\main\java\com\example\tennispartner\controller\AdminConfigController.java
 C:\NoOneDrive\Projekt\tennis_partner\tennis_partner_BE\src\main\java\com\example\tennispartner\dto\AuthResponse.java
 C:\NoOneDrive\Projekt\tennis_partner\tennis_partner_BE\src\main\java\com\example\tennispartner\config\WebConfig.java
+C:\NoOneDrive\Projekt\tennis_partner\tennis_partner_BE\src\main\java\com\example\tennispartner\service\InvitationStatusFixer.java
 C:\NoOneDrive\Projekt\tennis_partner\tennis_partner_BE\src\main\java\com\example\tennispartner\service\InvitationService.java
 C:\NoOneDrive\Projekt\tennis_partner\tennis_partner_BE\src\main\java\com\example\tennispartner\config\CorsConfig.java
 C:\NoOneDrive\Projekt\tennis_partner\tennis_partner_BE\src\main\java\com\example\tennispartner\controller\UserController.java

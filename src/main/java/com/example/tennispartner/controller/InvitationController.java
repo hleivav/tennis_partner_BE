@@ -1,3 +1,4 @@
+
 package com.example.tennispartner.controller;
 
 import com.example.tennispartner.dto.InvitationRequest;
@@ -42,6 +43,12 @@ public class InvitationController {
     @PostMapping("/{id}/ignore")
     public ResponseEntity<?> ignore(@PathVariable Long id) {
         return invitationService.setStatus(id, InvitationStatus.IGNORED)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    @PostMapping("/{id}/pending")
+    public ResponseEntity<?> pending(@PathVariable Long id) {
+        return invitationService.setStatus(id, InvitationStatus.PENDING)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
