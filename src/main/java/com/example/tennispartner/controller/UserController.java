@@ -75,7 +75,7 @@ public class UserController {
                 ));
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
-
+//Trigger deploy: koppling till Railway Postgres
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
     User saved = userService.register(user);
