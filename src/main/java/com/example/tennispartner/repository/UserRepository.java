@@ -6,4 +6,7 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
+
+    // Ta bort alla användare utom superadmin
+    void deleteAllByEmailNot(String email);
 }

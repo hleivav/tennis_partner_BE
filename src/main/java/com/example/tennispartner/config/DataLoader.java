@@ -3,6 +3,7 @@ package com.example.tennispartner.config;
 import com.example.tennispartner.model.User;
 import com.example.tennispartner.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,23 +17,23 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if (userRepository.count() == 0) {
-            User admin = User.builder()
-                    .email("admin@example.com")
-                    .password("admin") // För utveckling – byt i prod
-                    .fullName("Super Admin")
-                    .role("SUPERADMIN")
-                    .build();
-
-            User user = User.builder()
-                    .email("user@example.com")
-                    .password("password")
-                    .fullName("Test User")
-                    .role("USER")
-                    .build();
-
-            userRepository.save(admin);
-            userRepository.save(user);
-        }
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String adminEmail = "admin@admin.se";
+        String adminPassword = "admin123";
+        User admin = userRepository.findByEmail(adminEmail)
+            .orElse(User.builder()
+                .email(adminEmail)
+                .name("Admin")
+                .role("SUPERADMIN")
+                .build());
+        admin.setPassword(encoder.encode(adminPassword));
+        admin.setRole("SUPERADMIN");
+        userRepository.save(admin);
+        System.out.println("\n==============================");
+        System.out.println("ADMIN-KONTO TILLGÄNGLIGT!");
+        System.out.println("E-post:    " + adminEmail);
+        System.out.println("Lösenord:  " + adminPassword);
+        System.out.println("Roll:      SUPERADMIN");
+        System.out.println("==============================\n");
     }
 }

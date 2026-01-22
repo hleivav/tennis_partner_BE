@@ -22,9 +22,17 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    private String fullName;
+    private String name;
 
     private String role;
+
+    private String avatar;
+
+    private String level;
+
+    private Boolean seekingPartner;
+
+    private String phone;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 }

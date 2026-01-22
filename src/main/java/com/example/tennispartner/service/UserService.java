@@ -1,3 +1,4 @@
+
 package com.example.tennispartner.service;
 
 import com.example.tennispartner.model.User;
@@ -5,10 +6,17 @@ import com.example.tennispartner.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
+import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
+
 
 @Service
 public class UserService {
+    // Radera alla användare
+    public void deleteAll() {
+        userRepository.deleteAll();
+    }
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -24,8 +32,17 @@ public class UserService {
     }
 
     public Optional<User> login(String email, String rawPassword) {
-        return userRepository.findByEmail(email)
-                .filter(u -> encoder.matches(rawPassword, u.getPassword()));
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isEmpty()) {
+            System.out.println("[UserService] Ingen användare hittad för: " + email);
+            return Optional.empty();
+        }
+        User u = userOpt.get();
+        System.out.println("[UserService] Hittad användare: " + u.getEmail() + ", hash: " + u.getPassword());
+        boolean match = encoder.matches(rawPassword, u.getPassword());
+        System.out.println("[UserService] Lösenord matchar? " + match);
+        if (match) return Optional.of(u);
+        return Optional.empty();
     }
 
     public User updateProfile(User user) {
@@ -34,5 +51,27 @@ public class UserService {
 
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
+    }
+
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public void updatePassword(User user, String newPassword) {
+        user.setPassword(encoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
+    // Hämta alla användare
+    public Iterable<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    // Ta bort alla användare utom superadmin
+    @Transactional
+    public void deleteAllExceptSuperadmin() {
+        // Hämta superadmin (kan anpassas om du vill ha flera superadmins)
+        String superadminEmail = "hleiva@hotmail.com";
+        userRepository.deleteAllByEmailNot(superadminEmail);
     }
 }
