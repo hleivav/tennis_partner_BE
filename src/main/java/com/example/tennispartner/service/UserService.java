@@ -4,11 +4,10 @@ package com.example.tennispartner.service;
 import com.example.tennispartner.model.User;
 import com.example.tennispartner.repository.InvitationRepository;
 import com.example.tennispartner.repository.MatchRepository;
+import com.example.tennispartner.repository.PasswordResetTokenRepository;
 import com.example.tennispartner.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
@@ -23,14 +22,17 @@ public class UserService {
     private final UserRepository userRepository;
     private final InvitationRepository invitationRepository;
     private final MatchRepository matchRepository;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public UserService(UserRepository userRepository,
                        InvitationRepository invitationRepository,
-                       MatchRepository matchRepository) {
+                       MatchRepository matchRepository,
+                       PasswordResetTokenRepository passwordResetTokenRepository) {
         this.userRepository = userRepository;
         this.invitationRepository = invitationRepository;
         this.matchRepository = matchRepository;
+        this.passwordResetTokenRepository = passwordResetTokenRepository;
     }
 
     public User register(User user) {
@@ -75,13 +77,16 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    // Ta bort alla användare utom superadmin
+    // Nollställ databasen: ta bort allt utom superadmin
     @Transactional
     public void deleteAllExceptSuperadmin() {
-        String superadminEmail = "hleiva@hotmail.com";
-        // Ta bort beroenden (FK) innan användarna tas bort
-        invitationRepository.deleteAllInvolvingNonSuperadmin(superadminEmail);
-        matchRepository.deleteAllInvolvingNonSuperadmin(superadminEmail);
-        userRepository.deleteAllByEmailNot(superadminEmail);
+        // 1. Ta bort alla inbjudningar (FK till users)
+        invitationRepository.deleteAll();
+        // 2. Ta bort alla matcher (FK till users)
+        matchRepository.deleteAll();
+        // 3. Ta bort alla password reset tokens
+        passwordResetTokenRepository.deleteAll();
+        // 4. Ta bort alla användare som inte har rollen SUPERADMIN
+        userRepository.deleteAllByRoleNot("SUPERADMIN");
     }
 }
