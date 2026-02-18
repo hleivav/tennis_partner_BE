@@ -89,4 +89,17 @@ public class UserService {
         // 4. Ta bort alla användare som inte har rollen SUPERADMIN
         userRepository.deleteAllByRoleNot("SUPERADMIN");
     }
+
+    // Återställ spelare till default: ta bort alla inbjudningar och sätt seekingPartner=false
+    @Transactional
+    public void resetPlayersToDefault() {
+        // Ta bort alla inbjudningar
+        invitationRepository.deleteAll();
+        // Sätt seekingPartner=false för alla användare
+        Iterable<User> allUsers = userRepository.findAll();
+        for (User u : allUsers) {
+            u.setSeekingPartner(false);
+            userRepository.save(u);
+        }
+    }
 }

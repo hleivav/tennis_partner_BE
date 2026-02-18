@@ -16,6 +16,12 @@ public class UserController {
             userService.deleteAllExceptSuperadmin();
             return ResponseEntity.ok().build();
         }
+
+        @PostMapping("/reset-to-default")
+        public ResponseEntity<?> resetPlayersToDefault() {
+            userService.resetPlayersToDefault();
+            return ResponseEntity.ok().build();
+        }
     @GetMapping
     public ResponseEntity<?> listUsers() {
         return ResponseEntity.ok(userService.findAll());
