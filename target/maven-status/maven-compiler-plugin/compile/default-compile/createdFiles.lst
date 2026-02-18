@@ -8,6 +8,7 @@ com\example\tennispartner\dto\PasswordResetConfirmRequest.class
 com\example\tennispartner\repository\MatchRepository.class
 com\example\tennispartner\repository\PasswordResetTokenRepository.class
 com\example\tennispartner\model\AdminConfig.class
+com\example\tennispartner\service\InvitationStatusFixer.class
 com\example\tennispartner\service\EmailService.class
 com\example\tennispartner\config\CorsConfig.class
 com\example\tennispartner\config\DataLoader.class

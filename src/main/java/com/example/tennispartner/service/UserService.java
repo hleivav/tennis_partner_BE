@@ -2,6 +2,8 @@
 package com.example.tennispartner.service;
 
 import com.example.tennispartner.model.User;
+import com.example.tennispartner.repository.InvitationRepository;
+import com.example.tennispartner.repository.MatchRepository;
 import com.example.tennispartner.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,10 +21,16 @@ public class UserService {
     }
 
     private final UserRepository userRepository;
+    private final InvitationRepository invitationRepository;
+    private final MatchRepository matchRepository;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,
+                       InvitationRepository invitationRepository,
+                       MatchRepository matchRepository) {
         this.userRepository = userRepository;
+        this.invitationRepository = invitationRepository;
+        this.matchRepository = matchRepository;
     }
 
     public User register(User user) {
@@ -70,8 +78,10 @@ public class UserService {
     // Ta bort alla användare utom superadmin
     @Transactional
     public void deleteAllExceptSuperadmin() {
-        // Hämta superadmin (kan anpassas om du vill ha flera superadmins)
         String superadminEmail = "hleiva@hotmail.com";
+        // Ta bort beroenden (FK) innan användarna tas bort
+        invitationRepository.deleteAllInvolvingNonSuperadmin(superadminEmail);
+        matchRepository.deleteAllInvolvingNonSuperadmin(superadminEmail);
         userRepository.deleteAllByEmailNot(superadminEmail);
     }
 }
